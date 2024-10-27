@@ -14,41 +14,51 @@ main:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
-	addi $sp, $sp, -4
+	addi $sp, $sp, 0
+	subi $sp, $sp, 4
+	sw $s0, 0($sp)
+	subi $sp, $sp, 4
+	sw $s1, 0($sp)
+	subi $sp, $sp, 4
+	sw $s2, 0($sp)
 	li $t0, 0
-	sw $t0, -8($fp)
+	move $s1, $t0
 	li $t0, 10
-	la $t1, retour
-	sw $t0, 0($t1)
+	move $s2, $t0
 	li $t0, 32
 	la $t1, espace
 	sw $t0, 0($t1)
 	b __main_0
 __main_1:
-	lw $t0, 4($fp)
+	lw $t0, -8($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-	lw $t0, -8($fp)
+	move $t0, $s1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
 	jal affiche_ligne
 	addi $sp, $sp, 8
-	la $t0, retour
-	lw $t0, 0($t0)
+	move $t0, $s2
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	lw $t0, -8($fp)
+	move $t0, $s1
 	li $t1, 1
 	add $t0, $t0, $t1
-	sw $t0, -8($fp)
+	move $s1, $t0
 __main_0:
-	lw $t0, -8($fp)
-	lw $t1, 4($fp)
+	move $t0, $s1
+	lw $t1, -8($fp)
 	li $t2, 1
 	add $t1, $t1, $t2
 	slt $t0, $t0, $t1
 	bnez $t0, __main_1
+	lw $s2, 0($sp)
+	addi $sp, $sp, 4
+	lw $s1, 0($sp)
+	addi $sp, $sp, 4
+	lw $s0, 0($sp)
+	addi $sp, $sp, 4
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
@@ -62,20 +72,28 @@ affiche_ligne:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
-	addi $sp, $sp, -4
+	addi $sp, $sp, 0
+	subi $sp, $sp, 4
+	sw $s0, 0($sp)
+	subi $sp, $sp, 4
+	sw $s1, 0($sp)
+	subi $sp, $sp, 4
+	sw $s2, 0($sp)
+	subi $sp, $sp, 4
+	sw $s3, 0($sp)
 	li $t0, 0
-	sw $t0, -8($fp)
+	move $s3, $t0
 	b __affiche_ligne_0
 __affiche_ligne_1:
-	lw $t0, 4($fp)
-	lw $t1, 4($fp)
-	mul $t0, $t0, $t1
+	lw $t0, -8($fp)
 	lw $t1, -8($fp)
-	lw $t2, -8($fp)
+	mul $t0, $t0, $t1
+	move $t1, $s3
+	move $t2, $s3
 	mul $t1, $t1, $t2
 	add $t0, $t0, $t1
-	lw $t1, 8($fp)
-	lw $t2, 8($fp)
+	lw $t1, -12($fp)
+	lw $t2, -12($fp)
 	mul $t1, $t1, $t2
 	slt $t0, $t0, $t1
 	bnez $t0, __affiche_ligne_2
@@ -90,22 +108,29 @@ __affiche_ligne_2:
 	li $v0, 11
 	syscall
 __affiche_ligne_3:
-	la $t0, espace
-	lw $t0, 0($t0)
+	move $t0, $s1
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	lw $t0, -8($fp)
+	move $t0, $s3
 	li $t1, 1
 	add $t0, $t0, $t1
-	sw $t0, -8($fp)
+	move $s3, $t0
 __affiche_ligne_0:
-	lw $t0, -8($fp)
-	lw $t1, 8($fp)
+	move $t0, $s3
+	lw $t1, -12($fp)
 	li $t2, 1
 	add $t1, $t1, $t2
 	slt $t0, $t0, $t1
 	bnez $t0, __affiche_ligne_1
+	lw $s3, 0($sp)
+	addi $sp, $sp, 4
+	lw $s2, 0($sp)
+	addi $sp, $sp, 4
+	lw $s1, 0($sp)
+	addi $sp, $sp, 4
+	lw $s0, 0($sp)
+	addi $sp, $sp, 4
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4

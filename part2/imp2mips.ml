@@ -25,6 +25,9 @@ let rec restore regs k = if k < 0 then nop else    pop regs.(k) @@ restore regs 
 let    save_tmp = save    tmp_regs
 let restore_tmp = restore tmp_regs
 
+let    save_callee = save    var_regs
+let restore_callee = restore var_regs
+
 (* explicit allocation information for a local variable *)
 type explicit_alloc =
   | Reg   of string  (* name of the register *)
@@ -48,7 +51,7 @@ let allocate_locals fdef =
                 else  Hashtbl.add alloc x (Reg(Printf.sprintf "$s%i" i)) )
                 raw_alloc ;
   List.iteri (fun k i -> Hashtbl.add alloc i (Stack(-4*(k+2)))) fdef.params;
-  alloc, spill_count
+  alloc, r_max, spill_count
   
 
 (* Generate Mips code for an Imp function *)
@@ -69,7 +72,7 @@ let tr_function fdef =
   let alloc = Hashtbl.create 16 in
   List.iteri (fun k id -> Hashtbl.add alloc id (4*(k+1))) fdef.params;
   List.iteri (fun k id -> Hashtbl.add alloc id (-4*(k+2))) fdef.locals;*)
-  let alloc = fst(allocate_locals fdef) in
+  let alloc, r_max, spill_count = allocate_locals fdef in
 
   (* Generate Mips code for an Imp expression. The generated code produces the
      result in register $ti, and do not alter registers $tj with j < i. *)
@@ -165,9 +168,13 @@ let tr_function fdef =
   push fp @@ push ra @@ addi fp sp 4
   (* TODO: replace the following, to save callee-saved registers and allocate 
      the right number of slots on the stack for spilled local variables *)
-  @@ addi sp sp (-4 * List.length fdef.locals)
+  (*@@ addi sp sp (-4 * List.length fdef.locals)*)
+  @@ addi sp sp (-4 * spill_count)
+  @@ save_callee r_max
   @@ tr_seq fdef.code
   (* TODO: restore callee-saved registers *)
+  @@ restore_callee r_max
+
   @@ addi sp fp (-4) 
   @@ pop ra @@ pop fp @@ li t0 0 @@ jr ra
 
