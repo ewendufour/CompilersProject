@@ -36,9 +36,20 @@ let allocate_locals fdef =
   let nfdef = Nimp.from_imp_fdef fdef in
   let raw_alloc, r_max, spill_count = Linearscan.lscan_alloc nb_var_regs nfdef in
   let alloc =
-    failwith "not implemented"
+    Hashtbl.create 16
   in
-  failwith "not implemented"
+  let offset_locals = ref 0 in
+  Hashtbl.iter (fun x i -> 
+                if i = (-1) 
+                then begin 
+                     Hashtbl.add alloc x (Stack(4*(!offset_locals +1))); 
+                     incr offset_locals
+                     end
+                else  Hashtbl.add alloc x (Reg(Printf.sprintf "$s%i" i)) )
+                raw_alloc ;
+  List.iteri (fun k i -> Hashtbl.add alloc i (Stack(-4*(k+2)))) fdef.params;
+  alloc, spill_count
+  
 
 (* Generate Mips code for an Imp function *)
 (* Call frame
@@ -54,10 +65,11 @@ let allocate_locals fdef =
 let tr_function fdef =
   (* Allocation info for local variables and function parameters *)
   (* TODO: replace with an explicit allocation table deduced from [allocate_locals] *)
-  (*ignore(allocate_locals fdef);*)
+  (*ignore(allocate_locals fdef);
   let alloc = Hashtbl.create 16 in
   List.iteri (fun k id -> Hashtbl.add alloc id (4*(k+1))) fdef.params;
-  List.iteri (fun k id -> Hashtbl.add alloc id (-4*(k+2))) fdef.locals;
+  List.iteri (fun k id -> Hashtbl.add alloc id (-4*(k+2))) fdef.locals;*)
+  let alloc = fst(allocate_locals fdef) in
 
   (* Generate Mips code for an Imp expression. The generated code produces the
      result in register $ti, and do not alter registers $tj with j < i. *)
@@ -72,7 +84,9 @@ let tr_function fdef =
     | Var(x) -> 
       (* TODO: replace to take into account explicit allocation info *)
       (match Hashtbl.find_opt alloc x with
-       | Some offset -> lw ti offset(fp)
+       (*| Some offset -> lw ti offset(fp)*)
+       | Some(Reg(r)) -> move ti r
+       | Some(Stack(off))-> lw ti off(fp)
        | None -> la ti x @@ lw ti 0(ti)) (* non-local assumed to be a valid global *)
     | Binop(bop, e1, e2) ->
        let op = match bop with
@@ -115,7 +129,8 @@ let tr_function fdef =
     | Set(x, e) ->
        (* TODO: replace to take into account explicit allocation info *)
        let set_code = match Hashtbl.find_opt alloc x with
-         | Some offset -> sw t0 offset(fp)
+         | Some Reg(r) -> move r t0
+         | Some Stack(offset) -> sw t0 offset(fp)
          | None -> la t1 x @@ sw t0 0(t1)
        in
        tr_expr 0 e @@ set_code
