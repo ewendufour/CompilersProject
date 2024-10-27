@@ -1,0 +1,14 @@
+function main(arg){
+    var i;
+    var i2;
+    if (arg < 10){
+        i2 = 1;
+        i = arg *10;
+        
+    }else{
+        i = arg+10;
+        i2 = 2;
+    }
+    putchar(i2);
+    putchar(i);
+}
