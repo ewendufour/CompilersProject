@@ -81,4 +81,7 @@ let liveness_intervals_from_liveness fdef =
   Array.iteri (cell_act live_inter) live;
   (*let printer x (x1, x2) = Printf.printf "Liveness of %s : (%d, %d)\n" x x1 x2 in 
   Hashtbl.iter printer live_inter;*)
-  live_inter
+  let  unzip a (b, c) l = 
+    (a,b,c) :: l 
+  in
+  Hashtbl.fold unzip live_inter []

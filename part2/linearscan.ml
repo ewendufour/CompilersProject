@@ -12,7 +12,14 @@ let sort_intervals l =
 (* insert interval [i] in active list [l] 
    pre/post-condition: sorted by ascending upper bound *)
 let rec insert_active i l =
-  failwith "not implemented"
+  let thd (_, _, c) = c in
+  match l with 
+  | [] -> i :: []
+  | i' :: ll ->  
+    if (thd i') < (thd i) 
+      then i'::(insert_active i ll)
+    else i :: l
+
 
 (* raw allocation information for a variable *)
 type raw_alloc =
@@ -33,16 +40,33 @@ let lscan_alloc nb_regs fdef =
   (* free registers allocated to intervals that stop before timestamp a,
      returns remaining intervals *)
   let rec expire a l =
-    failwith "not implemented"
+    match !l with 
+    | [] -> ()
+    | (x', _, b') :: ll -> 
+      if b' < a then 
+      begin
+        free := (Hashtbl.find alloc x')::!free;
+        l := ll;
+        expire a l
+      end
+      else ()
+
   in
   (* for each interval i, in sorted order *)
   List.iter (fun i ->
       let xi, li, hi = i in
+      expire li active; 
+      match !free with
+      | [] -> Hashtbl.add alloc xi (-1) ; incr spill_count
+      | r :: ll -> 
+        free := ll;
+        r_max := max r !r_max;
+        Hashtbl.add alloc xi r;
+        active := insert_active i !active
       (* free registers that expire before the lower bound of i *)
       (* if there are available registers *)
         (* ... then allocate one *)
         (* otherwise, may replace an already used register if this can
            make this register available again earlier *)
-      failwith "not implemented"
     ) (sort_intervals live_intervals);
   alloc, !r_max, !spill_count
