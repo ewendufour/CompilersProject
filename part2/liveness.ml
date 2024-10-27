@@ -10,7 +10,6 @@ let rec use_expr e =
   | Var x -> VSet.singleton x 
   | Binop(_, e1, e2) -> VSet.union (use_expr e1) (use_expr e2)
   | Call(_, el) -> List.fold_left VSet.union VSet.empty (List.map use_expr el) 
-  | _ -> failwith "not implemented"
 
 let liveness fdef =
   let n = max_instr_list fdef.code in
@@ -40,7 +39,6 @@ let liveness fdef =
                      live.(i.nb) <- s;
                      s
     (* While ? two rounds are enough *)
-    | _ -> failwith "not implemented"
   (* the same for a sequence, and records in [live] the live sets computed
      on entry to each analyzed instruction *)
   and lv_in_list l lv_out = 
@@ -48,10 +46,9 @@ let liveness fdef =
     | [] -> lv_out 
     | i :: l' -> let lv_out_i = lv_in_list l' lv_out in
                  lv_in_instr i lv_out_i  
-    | _ -> failwith "not implemented"
   in
   let _ = lv_in_list fdef.code VSet.empty in
-  let rec printer2 instrl = 
+  (*let rec printer2 instrl = 
     List.iter printer3 instrl
     
   and printer3 = function 
@@ -64,7 +61,7 @@ let liveness fdef =
                           printer2 s;
     | {nb = i; instr = Return e} -> Printf.printf "instruction nb %d : return\n" i
     | {nb = i; instr = Expr e} -> Printf.printf "instruction nb %d : expr\n" i
-  in 
+  in *)
   (*printer2 fdef.code ;*)
   live
 
