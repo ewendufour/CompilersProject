@@ -27,9 +27,11 @@ let liveness fdef =
     | Return e -> let s = (use_expr e) in   
                   live.(i.nb) <- s;
                   s
-    | Set(x, e) -> let s = (VSet.union (use_expr e) (VSet.remove x lv_out)) in
-                  live.(i.nb) <- s;
-                  s
+    | Set(x, e) -> if List.mem x fdef.locals then 
+                   let s = (VSet.union (use_expr e) (VSet.remove x lv_out)) in
+                   live.(i.nb) <- s;
+                   s
+                   else assert false
     | If(e, s1, s2) -> let s = VSet.union (use_expr e) (VSet.union (lv_in_list s1 lv_out) (lv_in_list s2 lv_out)) in
                       live.(i.nb) <- s;
                       s
