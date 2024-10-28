@@ -165,11 +165,24 @@ let tr_function fdef =
      Initialize the stack frame and save callee-saved registers, run the code of 
      the function, then restore callee-saved, clean the stack and returns with a 
      dummy value if no explicit return met. *)
+  if spill_count >0 then 
   push fp @@ push ra @@ addi fp sp 4
   (* TODO: replace the following, to save callee-saved registers and allocate 
      the right number of slots on the stack for spilled local variables *)
   (*@@ addi sp sp (-4 * List.length fdef.locals)*)
   @@ addi sp sp (-4 * spill_count)
+  @@ save_callee r_max
+  @@ tr_seq fdef.code
+  (* TODO: restore callee-saved registers *)
+  @@ restore_callee r_max
+
+  @@ addi sp fp (-4) 
+  @@ pop ra @@ pop fp @@ li t0 0 @@ jr ra
+else 
+  push fp @@ push ra @@ addi fp sp 4
+  (* TODO: replace the following, to save callee-saved registers and allocate 
+     the right number of slots on the stack for spilled local variables *)
+  (*@@ addi sp sp (-4 * List.length fdef.locals)*)
   @@ save_callee r_max
   @@ tr_seq fdef.code
   (* TODO: restore callee-saved registers *)
