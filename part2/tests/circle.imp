@@ -7,8 +7,8 @@ function main(arg) {
   retour = 10;
   espace = 32;
 
-  while (i < 12+1) {
-    affiche_ligne(i, 12);
+  while (i < arg+1) {
+    affiche_ligne(i, arg);
     putchar(retour);
     i = i + 1;
   }

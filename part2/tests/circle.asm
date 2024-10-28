@@ -26,7 +26,7 @@ main:
 	sw $t0, 0($t1)
 	b __main_0
 __main_1:
-	li $t0, 12
+	lw $t0, 4($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
 	move $t0, $s0
@@ -45,7 +45,7 @@ __main_1:
 	move $s0, $t0
 __main_0:
 	move $t0, $s0
-	li $t1, 12
+	lw $t1, 4($fp)
 	li $t2, 1
 	add $t1, $t1, $t2
 	slt $t0, $t0, $t1
