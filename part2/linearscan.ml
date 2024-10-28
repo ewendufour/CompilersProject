@@ -26,12 +26,19 @@ type raw_alloc =
   | RegN  of int  (* index of the register *)
   | Spill of int  (* index of the spill *)
 
+let rec clean_globals fdef li = 
+  match li with 
+  [] -> []
+  | (x,a,b)::lli -> if List.mem x fdef.locals then (x,a,b)::(clean_globals fdef lli)
+                    else clean_globals fdef lli 
+
 (* allocation of the local variables of a function [fdef] using linear scan
    algorithm, with [nb_regs] registers available for allocation ;
    return a raw allocation for each variable, as well as the maximum index of
    used registers, and the number of used stack slots (spills) *)
 let lscan_alloc nb_regs fdef =
   let live_intervals = Liveness.liveness_intervals_from_liveness fdef in
+ (* let live_intervals = clean_globals fdef live_intervals in*)
   let alloc = Hashtbl.create (List.length fdef.locals) in
   let active = ref [] in
   let free = ref (List.init nb_regs (fun i -> i)) in

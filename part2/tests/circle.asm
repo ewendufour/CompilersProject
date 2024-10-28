@@ -19,9 +19,9 @@ main:
 	subi $sp, $sp, 4
 	sw $s1, 0($sp)
 	li $t0, 0
-	move $s1, $t0
-	li $t0, 10
 	move $s0, $t0
+	li $t0, 10
+	move $s1, $t0
 	li $t0, 32
 	la $t1, espace
 	sw $t0, 0($t1)
@@ -30,21 +30,21 @@ __main_1:
 	li $t0, 12
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-	move $t0, $s1
+	move $t0, $s0
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
 	jal affiche_ligne
 	addi $sp, $sp, 8
-	move $t0, $s0
+	move $t0, $s1
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	move $t0, $s1
+	move $t0, $s0
 	li $t1, 1
 	add $t0, $t0, $t1
-	move $s1, $t0
+	move $s0, $t0
 __main_0:
-	move $t0, $s1
+	move $t0, $s0
 	li $t1, 12
 	li $t2, 1
 	add $t1, $t1, $t2
