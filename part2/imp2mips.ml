@@ -57,8 +57,8 @@ let allocate_locals fdef =
                 else  Hashtbl.add alloc x (Reg(Printf.sprintf "$s%i" i)) )
                 raw_alloc ;
   List.iteri (fun k i -> Hashtbl.add alloc i (Stack(4*(k+1)))) fdef.params;
-  Printf.printf "In function %s:" fdef.name;
-  Hashtbl.iter print_explicit_alloc alloc;
+  (*Printf.printf "In function %s:" fdef.name;
+  Hashtbl.iter print_explicit_alloc alloc;*)
   alloc, r_max, spill_count
   
 
