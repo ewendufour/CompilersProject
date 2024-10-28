@@ -33,6 +33,12 @@ type explicit_alloc =
   | Reg   of string  (* name of the register *)
   | Stack of int     (* offset on the stack, relative to fp *)
 
+let print_explicit_alloc k v =
+  Printf.printf "variable %s is stocked in:\n" k;
+  match v with
+  | Reg(r) -> Printf.printf "register %s\n" r
+  | Stack(off) -> Printf.printf "memory %d\n" off
+
 (* create an explicit allocation for all local variables and function 
    parameters of a function [fdef] *)
 let allocate_locals fdef =
@@ -45,12 +51,14 @@ let allocate_locals fdef =
   Hashtbl.iter (fun x i -> 
                 if i = (-1) 
                 then begin 
-                     Hashtbl.add alloc x (Stack(4*(!offset_locals +1))); 
+                     Hashtbl.add alloc x (Stack(-4*(!offset_locals +2))); 
                      incr offset_locals
                      end
                 else  Hashtbl.add alloc x (Reg(Printf.sprintf "$s%i" i)) )
                 raw_alloc ;
-  List.iteri (fun k i -> Hashtbl.add alloc i (Stack(-4*(k+2)))) fdef.params;
+  List.iteri (fun k i -> Hashtbl.add alloc i (Stack(4*(k+1)))) fdef.params;
+  Printf.printf "In function %s:" fdef.name;
+  Hashtbl.iter print_explicit_alloc alloc;
   alloc, r_max, spill_count
   
 

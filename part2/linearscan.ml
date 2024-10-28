@@ -31,14 +31,30 @@ let rec clean_globals fdef li =
   [] -> []
   | (x,a,b)::lli -> if List.mem x fdef.locals then (x,a,b)::(clean_globals fdef lli)
                     else clean_globals fdef lli 
+              
+let debug_liveinter l = 
+  let rec printer = function
+  | [] -> ()
+  | (x, a, b) :: ll -> Printf.printf "variables %s lives in [%d,%d]\n" x a b;
+                      printer ll
+  in
+  Printf.printf "Live intervals :\n";
+  printer l
+
 
 (* allocation of the local variables of a function [fdef] using linear scan
    algorithm, with [nb_regs] registers available for allocation ;
    return a raw allocation for each variable, as well as the maximum index of
    used registers, and the number of used stack slots (spills) *)
 let lscan_alloc nb_regs fdef =
+  (*Printf.printf "In function %s:\n" fdef.name;*)
   let live_intervals = Liveness.liveness_intervals_from_liveness fdef in
- (* let live_intervals = clean_globals fdef live_intervals in*)
+  (*Printf.printf "Before cleanup\n";
+  debug_liveinter live_intervals;*)
+  let live_intervals = clean_globals fdef live_intervals in
+  (*Printf.printf "After cleanup\n";
+  debug_liveinter live_intervals;*)
+
   let alloc = Hashtbl.create (List.length fdef.locals) in
   let active = ref [] in
   let free = ref (List.init nb_regs (fun i -> i)) in
