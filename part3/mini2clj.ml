@@ -58,7 +58,9 @@ let translate_program (p: Miniml.prog) =
           
       | Bop(op, e1, e2) ->
         Binop(op, crawl e1 bvars, crawl e2 bvars)
-
+      
+      | Uop(op, e1) ->
+        Unop(op, crawl e1 bvars)
       (* The range of 'x' in 'let x = e1 in e2' is the expression e2:
          add x in the bound variables when translating e2 *)
       | Let(x, e1, e2) ->

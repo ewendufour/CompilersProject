@@ -1,0 +1,13 @@
+var pair_1;
+var a_0;
+
+main {
+  pair_1 = malloc(20);
+  *pair_1 = 20;
+  *(pair_1+4) = 12;
+  *(pair_1+8) = 16;
+  *(pair_1+12) = 24;
+  *(pair_1+16) = 42;
+  a_0 = pair_1;
+  print_int(*(a_0+*(a_0+8)));
+}
