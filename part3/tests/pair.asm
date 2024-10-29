@@ -80,10 +80,89 @@ init_end:
 	lw $t0, 0($t0)
 	la $t1, a_0
 	sw $t0, 0($t1)
+	li $t0, 20
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	jal malloc
+	addi $sp, $sp, 4
+	la $t1, pair_3
+	sw $t0, 0($t1)
+	li $t0, 20
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	la $t0, pair_3
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	sw $t1, 0($t0)
+	li $t0, 12
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	li $t0, 4
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	la $t0, pair_3
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	sw $t1, 0($t0)
+	li $t0, 16
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
 	li $t0, 8
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
+	la $t0, pair_3
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	sw $t1, 0($t0)
 	la $t0, a_0
+	lw $t0, 0($t0)
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	li $t0, 12
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	la $t0, pair_3
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	sw $t1, 0($t0)
+	li $t0, 1
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	li $t0, 16
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	la $t0, pair_3
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	sw $t1, 0($t0)
+	la $t0, pair_3
+	lw $t0, 0($t0)
+	la $t1, b_2
+	sw $t0, 0($t1)
+	li $t0, 8
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	li $t0, 4
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	la $t0, b_2
 	lw $t0, 0($t0)
 	addi $sp, $sp, 4
 	lw $t1, 0($sp)
@@ -91,7 +170,34 @@ init_end:
 	lw $t0, 0($t0)
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
-	la $t0, a_0
+	la $t0, b_2
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	li $t0, 4
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	la $t0, b_2
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
+	la $t0, b_2
+	lw $t0, 0($t0)
+	addi $sp, $sp, 4
+	lw $t1, 0($sp)
+	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	addi $sp, $sp, 4
 	lw $t1, 0($sp)
@@ -170,6 +276,10 @@ power_loop_guard:
 	subi $sp, $sp, 4
 	jr $ra
 .data
+pair_3:
+	.word 0
+b_2:
+	.word 0
 pair_1:
 	.word 0
 a_0:

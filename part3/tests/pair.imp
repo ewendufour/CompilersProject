@@ -1,3 +1,5 @@
+var pair_3;
+var b_2;
 var pair_1;
 var a_0;
 
@@ -9,5 +11,12 @@ main {
   *(pair_1+12) = 24;
   *(pair_1+16) = 42;
   a_0 = pair_1;
-  print_int(*(a_0+*(a_0+8)));
+  pair_3 = malloc(20);
+  *pair_3 = 20;
+  *(pair_3+4) = 12;
+  *(pair_3+8) = 16;
+  *(pair_3+12) = a_0;
+  *(pair_3+16) = 1;
+  b_2 = pair_3;
+  print_int(*(*(b_2+*(b_2+4))+*(*(b_2+*(b_2+4))+8)));
 }

@@ -35,6 +35,7 @@ let tr_var v env = match v with
 
 let size_of = function 
 | Imp.Int _ -> 4
+| Imp.Var _ -> 4 
 | _ -> assert false
 let tr_expr e env =
   (* Counter for fresh variable names *)
