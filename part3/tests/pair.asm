@@ -5,14 +5,14 @@
 	la $t0, arg
 	sw $v0, 0($t0)
 init_end:
-	li $t0, 20
+	li $t0, 12
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	jal malloc
 	addi $sp, $sp, 4
 	la $t1, pair_1
 	sw $t0, 0($t1)
-	li $t0, 20
+	li $t0, 12
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	la $t0, pair_1
@@ -20,7 +20,7 @@ init_end:
 	addi $sp, $sp, 4
 	lw $t1, 0($sp)
 	sw $t1, 0($t0)
-	li $t0, 12
+	li $t0, 24
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	li $t0, 4
@@ -34,38 +34,10 @@ init_end:
 	addi $sp, $sp, 4
 	lw $t1, 0($sp)
 	sw $t1, 0($t0)
-	li $t0, 16
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	li $t0, 8
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	la $t0, pair_1
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	sw $t1, 0($t0)
-	li $t0, 24
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	li $t0, 12
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	la $t0, pair_1
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	sw $t1, 0($t0)
 	li $t0, 42
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
-	li $t0, 16
+	li $t0, 8
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	la $t0, pair_1
@@ -80,14 +52,14 @@ init_end:
 	lw $t0, 0($t0)
 	la $t1, a_0
 	sw $t0, 0($t1)
-	li $t0, 20
+	li $t0, 12
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	jal malloc
 	addi $sp, $sp, 4
 	la $t1, pair_3
 	sw $t0, 0($t1)
-	li $t0, 20
+	li $t0, 12
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	la $t0, pair_3
@@ -95,7 +67,8 @@ init_end:
 	addi $sp, $sp, 4
 	lw $t1, 0($sp)
 	sw $t1, 0($t0)
-	li $t0, 12
+	la $t0, a_0
+	lw $t0, 0($t0)
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	li $t0, 4
@@ -109,39 +82,10 @@ init_end:
 	addi $sp, $sp, 4
 	lw $t1, 0($sp)
 	sw $t1, 0($t0)
-	li $t0, 16
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	li $t0, 8
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	la $t0, pair_3
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	sw $t1, 0($t0)
-	la $t0, a_0
-	lw $t0, 0($t0)
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	li $t0, 12
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	la $t0, pair_3
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	sw $t1, 0($t0)
 	li $t0, 1
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
-	li $t0, 16
+	li $t0, 8
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	la $t0, pair_3
@@ -156,41 +100,10 @@ init_end:
 	lw $t0, 0($t0)
 	la $t1, b_2
 	sw $t0, 0($t1)
+	li $t0, 4
+	sw $t0, 0($sp)
+	subi $sp, $sp, 4
 	li $t0, 8
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	li $t0, 4
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	la $t0, b_2
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	lw $t0, 0($t0)
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	la $t0, b_2
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	lw $t0, 0($t0)
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	li $t0, 4
-	sw $t0, 0($sp)
-	subi $sp, $sp, 4
-	la $t0, b_2
-	lw $t0, 0($t0)
-	addi $sp, $sp, 4
-	lw $t1, 0($sp)
-	add $t0, $t0, $t1
-	lw $t0, 0($t0)
 	sw $t0, 0($sp)
 	subi $sp, $sp, 4
 	la $t0, b_2

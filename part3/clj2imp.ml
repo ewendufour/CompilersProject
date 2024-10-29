@@ -74,16 +74,12 @@ let tr_expr e env =
            4 pour stocker l'adresse du deuxième elt
            *)
          let var = new_var "pair" in
-         let pos_2 = header_size + (size_of te1)  in
-         let total_size = pos_2 + (size_of te2) in
          let instructions = 
             [
-            Imp.Set(var, Imp.Call("malloc", [Imp.Int total_size]));
-            Imp.Write(Imp.Var var, Imp.Int total_size);
-            Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int 4), Imp.Int header_size);
-            Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int 8), Imp.Int pos_2);
-            Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int header_size), te1);
-            Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int pos_2), te2)
+            Imp.Set(var, Imp.Call("malloc", [Imp.Int 12]));
+            Imp.Write(Imp.Var var, Imp.Int 12);
+            Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int 4), te1);
+            Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int 8), te2)
             ] in
          is1 @ is2 @ instructions, Imp.Var var
           
@@ -94,10 +90,10 @@ let tr_expr e env =
       
       | Clj.Unop(Fst, e1) ->
          let is1, te1 = tr_expr e1 env in
-         is1, Imp.Deref(Imp.Binop(Add, te1, Imp.Deref(Imp.Binop(Add, te1, Imp.Int 4))))
+         is1, Imp.Deref(Imp.Binop(Add, te1, Imp.Int 4))
       | Clj.Unop(Snd, e1) -> 
          let is1, te1 = tr_expr e1 env in
-         is1, Imp.Deref(Imp.Binop(Add, te1, Imp.Deref(Imp.Binop(Add, te1, Imp.Int 8))))
+         is1, Imp.Deref(Imp.Binop(Add, te1, Imp.Int 8))
       | Clj.Let(x, e1, e2) ->
          (* Creation of a unique name for 'x', to be used instead of 'x'
             in the expression e2. *)
