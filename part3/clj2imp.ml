@@ -91,9 +91,11 @@ let tr_expr e env =
       | Clj.Unop(Fst, e1) ->
          let is1, te1 = tr_expr e1 env in
          is1, Imp.Deref(Imp.Binop(Add, te1, Imp.Int 4))
+
       | Clj.Unop(Snd, e1) -> 
          let is1, te1 = tr_expr e1 env in
          is1, Imp.Deref(Imp.Binop(Add, te1, Imp.Int 8))
+
       | Clj.Let(x, e1, e2) ->
          (* Creation of a unique name for 'x', to be used instead of 'x'
             in the expression e2. *)
@@ -102,6 +104,12 @@ let tr_expr e env =
          let is2, t2 = tr_expr e2 (STbl.add x lv env) in
          Imp.(is1 @ [Set(lv, t1)] @ is2, t2)
 
+      | Clj.If(e1, e2, e3) ->
+         let is1, te1 = tr_expr e1 env in
+         let is2, te2 = tr_expr e2 env in
+         let is3, te3 = tr_expr e3 env in
+         let var = new_var "if" in
+         is1@[Imp.If(te1, is2@[Imp.Set(var, te2)], is3@[Imp.Set(var, te3)])], Var var
       | _ ->
          failwith "todo"
 

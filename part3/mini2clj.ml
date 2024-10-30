@@ -65,7 +65,9 @@ let translate_program (p: Miniml.prog) =
          add x in the bound variables when translating e2 *)
       | Let(x, e1, e2) ->
         Let(x, crawl e1 bvars, crawl e2 (VSet.add x bvars))
-
+      
+      | If(e1, e2, e3) ->
+        If(crawl e1 bvars, crawl e2 bvars, crawl e3 bvars)
       (* Translation of an anonymous function *)
       | Fun(x, _, e) ->
          (* create a global function definition, and add it to fdefs
