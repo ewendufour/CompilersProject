@@ -73,6 +73,11 @@ let translate_program (p: Miniml.prog) =
          (* create a global function definition, and add it to fdefs
             (this implies creating a new name with new_fname) *)
          (* return an expression that builds a closure *)
+         let nf = new_fname () in
+         let nfdef = Clj.{ name = nf;
+                       body = crawl e bvars;
+                       param = x} in
+         fdefs := nfdef :: !fdefs;
          failwith "todo"
 
       | _ ->
