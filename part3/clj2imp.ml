@@ -95,6 +95,10 @@ let tr_expr e env =
       | Clj.Unop(Snd, e1) -> 
          let is1, te1 = tr_expr e1 env in
          is1, Imp.Deref(Imp.Binop(Add, te1, Imp.Int 8))
+         
+      | Clj.Unop(op, e1) ->
+         let is1, te1 = tr_expr e1 env in
+         is1, Imp.Unop(op, te1) 
 
       | Clj.Let(x, e1, e2) ->
          (* Creation of a unique name for 'x', to be used instead of 'x'
