@@ -73,13 +73,21 @@ let translate_program (p: Miniml.prog) =
          (* create a global function definition, and add it to fdefs
             (this implies creating a new name with new_fname) *)
          (* return an expression that builds a closure *)
-         let nf = new_fname () in
-         let nfdef = Clj.{ name = nf;
-                       body = crawl e bvars;
-                       param = x} in
-         fdefs := nfdef :: !fdefs;
-         failwith "todo"
+        let printer = function
+        | (s, i) -> Printf.printf "Variable libre %s position %d\n" s i in
+        let new_name = new_fname () in
+        Printf.printf "fun %s( \n" x;
+        let e0, varlibres = tr_expr e (VSet.add x VSet.empty) in
+        List.iter printer varlibres;
+        Printf.printf ")\n" ;
+        let nfdef = Clj.{name = new_name;
+                         body = e0;
+                         param = x} in
+        fdefs := nfdef :: !fdefs;
+        MkClj(new_name, List.map(fun (x0, _) -> Clj.Name x0) varlibres )
 
+      | App(e1, e2) ->
+        App(crawl e1 bvars, crawl e2 bvars)
       | _ ->
          failwith "todo"
 

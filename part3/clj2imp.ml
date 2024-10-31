@@ -114,6 +114,24 @@ let tr_expr e env =
          let is3, te3 = tr_expr e3 env in
          let var = new_var "if" in
          is1@[Imp.If(te1, is2@[Imp.Set(var, te2)], is3@[Imp.Set(var, te3)])], Var var
+   
+      | MkClj(f, vl) ->
+         let block_size = 4 + (List.length vl) * 4 in
+         let var = new_var "closure" in
+         let instructions = [
+            Imp.Set(var, Imp.Call("malloc", [Imp.Int block_size]));
+            Imp.array_set (Imp.Var var) (Imp.Int 0) (Imp.Addr f) 
+         ] in
+         let nl = List.mapi
+            (fun i x -> Imp.array_set (Imp.Var var) (Imp.Int (i+1))(tr_var x env))
+         vl in
+         instructions@nl, Imp.Var var
+      
+      | Clj.App(e1, e2) ->
+         let is1, te1 = tr_expr e1 env in
+         let is2, te2 = tr_expr e2 env in
+         is2@is1, Imp.PCall(Imp.Deref(Imp.Deref te1), [te2; te1])
+         
       | _ ->
          failwith "todo"
 

@@ -1,1 +1,1 @@
-Ajout conditions, semble fonctionnel
+Converstion des fonctions semble correcte sur les exemples fun 1 et fun 2
