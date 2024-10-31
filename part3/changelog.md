@@ -1,1 +1,1 @@
-Converstion des fonctions semble correcte sur les exemples fun 1 et fun 2
+Converstion des fonctions semble fonctionner pour une hauteur arbitraire de curryfication
