@@ -83,6 +83,9 @@ let translate_program (p: Miniml.prog) =
 
       | App(e1, e2) ->
         App(crawl e1 bvars, crawl e2 bvars)
+      
+      | Fix(x,_,e) ->
+        Fix(x, crawl e bvars)
       | _ ->
          failwith "todo"
 
