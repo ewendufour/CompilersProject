@@ -1,0 +1,23 @@
+var closure_2;
+var fact_1;
+var fact_0;
+
+function fun_0(param_n,closure) {
+  var if_0;
+
+  if ((param_n<=1)) {
+    if_0 = 1;
+  } else {
+    if_0 = (param_n*(**closure[1])((param_n-1),closure[1]));
+  }
+  return(if_0);
+}
+
+main {
+  closure_2 = malloc(8);
+  closure_2[0] = &fun_0;
+  closure_2[1] = fact_1;
+  fact_1 = closure_2;
+  fact_0 = fact_1;
+  print_int((**fact_0)(6,fact_0));
+}

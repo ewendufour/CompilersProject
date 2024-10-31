@@ -76,7 +76,7 @@ let tr_expr e env =
          let var = new_var "pair" in
          let instructions = 
             [
-            Imp.Set(var, Imp.Call("malloc", [Imp.Int 12]));
+            Imp.Set(var, Imp.Call("malloc", [Imp.Int header_size]));
             Imp.Write(Imp.Var var, Imp.Int 12);
             Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int 4), te1);
             Imp.Write(Imp.Binop(Add, Imp.Var var, Imp.Int 8), te2)
@@ -130,7 +130,13 @@ let tr_expr e env =
       | Clj.App(e1, e2) ->
          let is1, te1 = tr_expr e1 env in
          let is2, te2 = tr_expr e2 env in
-         is2@is1, Imp.PCall(Imp.Deref(Imp.Deref te1), [te2; te1])
+         is1@is2, Imp.PCall(Imp.Deref(Imp.Deref te1), [te2; te1])
+         
+      | Clj.Fix(x, e1) -> 
+         let fix_var = new_var x in
+         let is1 ,te1 = tr_expr e1 (STbl.add x fix_var env) in
+         is1@[Imp.Set(fix_var, te1)], Imp.Var fix_var
+
          
       | _ ->
          failwith "todo"

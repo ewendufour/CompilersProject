@@ -25,6 +25,10 @@ let translate_program (p: Miniml.prog) =
      - e' : Clj expression
      - l  : association list, maps each free variable to its index in the current closure
    *)
+
+  let printer = function 
+  | s, i-> Printf.printf "Var %s is at index %d in closure\n" s i in
+
   let rec tr_expr (e: Miniml.expr) (bvars: VSet.t): Clj.expression * (string * int) list =
     (* association list, maps free variables to indices in the closure *)
     let cvars = ref [] in
@@ -79,13 +83,15 @@ let translate_program (p: Miniml.prog) =
                          body = e0;
                          param = x} in
         fdefs := nfdef :: !fdefs;
+        List.iter printer varlibres;
         MkClj(new_name, List.map(fun (x0, _) -> convert_var x0 bvars) varlibres )
 
       | App(e1, e2) ->
         App(crawl e1 bvars, crawl e2 bvars)
       
       | Fix(x,_,e) ->
-        Fix(x, crawl e bvars)
+        let e0, _ = tr_expr e (VSet.add x bvars) in
+        Fix(x, e0)
       | _ ->
          failwith "todo"
 
