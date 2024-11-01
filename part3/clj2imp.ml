@@ -123,7 +123,10 @@ let tr_expr e env =
             Imp.array_set (Imp.Var var) (Imp.Int 0) (Imp.Addr f) 
          ] in
          let nl = List.mapi
-            (fun i x -> Imp.array_set (Imp.Var var) (Imp.Int (i+1))(tr_var x env))
+            (fun i x -> Imp.array_set (Imp.Var var) (Imp.Int (i+1))(
+               match tr_var x env with
+               | Imp.Var "closure" -> Imp.Var var 
+               | e -> e))
          vl in
          instructions@nl, Imp.Var var
       
@@ -133,9 +136,8 @@ let tr_expr e env =
          is1@is2, Imp.PCall(Imp.Deref(Imp.Deref te1), [te2; te1])
          
       | Clj.Fix(x, e1) -> 
-         let fix_var = new_var x in
-         let is1 ,te1 = tr_expr e1 (STbl.add x fix_var env) in
-         is1@[Imp.Set(fix_var, te1)], Imp.Var fix_var
+         let is1 ,te1 = tr_expr e1 (STbl.add x "closure" env) in
+         is1, te1
 
          
       | _ ->

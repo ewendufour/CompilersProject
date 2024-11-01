@@ -1,1 +1,1 @@
-Converstion des fonctions semble fonctionner pour une hauteur arbitraire de curryfication
+Solution pour la recursion trouvée, peut etre non viable mais ca marche
