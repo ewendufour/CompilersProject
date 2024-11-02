@@ -8,6 +8,19 @@
 (* Module for variables renamings *)
 module STbl = Map.Make(String)
 
+let make_struct_env () =
+   let env = Hashtbl.create 10 in
+   let current_id = ref (-1) in
+   fun (s:string) ->
+     match Hashtbl.find_opt env s with
+     | Some id -> id
+     | None ->
+         incr current_id;
+         Hashtbl.add env s !current_id;
+         !current_id
+ 
+let struct_env = make_struct_env ()
+   
 (* Translation of variables
    - named variables are looked up in the renaming table (or accessed
      directly)
@@ -33,10 +46,7 @@ let tr_var v env = match v with
    Spec: executing s then evaluating e' in IMP is equivalent to evaluating e in CLJ
 *)
 
-let size_of = function 
-| Imp.Int _ -> 4
-| Imp.Var _ -> 4 
-| _ -> assert false
+
 let tr_expr e env =
   (* Counter for fresh variable names *)
   let cpt = ref (-1) in
@@ -139,9 +149,51 @@ let tr_expr e env =
          let is1 ,te1 = tr_expr e1 (STbl.add x "closure" env) in
          is1, te1
 
-         
-      | _ ->
-         failwith "todo"
+      | Clj.Cstr(s, el) ->
+         let rec split instrl exprl size = function
+         | [] -> instrl, exprl, size
+         | e::ell -> let is, te  = tr_expr e env in
+                 split (is@instrl) (te::exprl) (size+8) ell
+         in
+         let instrs, exprs, size = split [] [] 4 el in
+         let id = struct_env s in
+         let var = new_var "cstr" in 
+         let instruction = [
+            Imp.Set(var, Imp.Call("malloc", [Imp.Int size]));
+            Imp.array_set (Imp.Var var) (Imp.Int 0) (Imp.Int size); 
+            Imp.array_set (Imp.Var var) (Imp.Int 1) (Imp.Int id)
+         ]in
+         let ni= List.mapi 
+            (fun i x -> Imp.array_set (Imp.Var var) (Imp.Int (i+2)) x )
+            exprs in
+      instrs@instruction@ni, Imp.Var var
+
+      | Clj.Match(e, cl) ->
+         let is1, te1 = tr_expr e env in
+         let res_var = new_var "match" in
+         let id_var = new_var "case_id" in
+         let is2 = [Imp.Set (id_var, Imp.array_get te1 (Imp.Int 1) )] in
+         let rec tr_case_l id_var res_var= function 
+         | [] -> []
+         | ((s, sl), ec ) :: cl -> 
+            let matched_id = struct_env s in
+
+            (*
+               Creer les instructions du premiers cas
+               Il faut binder les sl avec les args de te1 
+               Mapi fun i x -> Imp.Set(Imp.var sl, array_acces i te1 ) Env.add sl var sl sl
+            *)
+            let rec bind instrs i env= function
+            | [] -> List.rev instrs, env
+            | ssl::ssll -> 
+               let nv = new_var ssl in
+               bind (Imp.Set(nv, Imp.array_get te1 (Imp.Int i) )::instrs) (i+1) (STbl.add ssl nv env) ssll
+            in
+            let instrs, env' = bind [] 2 env sl in
+            let is3, te3 = tr_expr ec env' in
+            [Imp.If(Imp.Binop(Eq, Imp.Var id_var, Imp.Int matched_id), instrs@is3@[Imp.Set(res_var, te3) ] , (tr_case_l id_var res_var cl))]
+         in 
+         is1@is2@(tr_case_l id_var res_var cl), Imp.Var res_var
 
   in
     

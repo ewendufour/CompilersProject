@@ -1,8 +1,11 @@
-let f (x:int) (y:int) (z:int) = x * y + z in
-let g (x:int) = f 6 x  in
-let t =g 7  in
-t 8
+let g (x:int) = x in
 
+let rec f (z:int):int = 
+  if z = 0 then 3
+  else g (f (z-1)) 
+in
+
+f 5
 (* 
 Fun x -> Fun y -> Fun z -> x * y + z  
 

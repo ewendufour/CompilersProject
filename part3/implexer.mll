@@ -95,8 +95,7 @@ rule token = parse
   | "&"
       { AMPERSAND }
   | _
-      { failwith ("Unknown character : " ^ (lexeme lexbuf)) }
-  | eof
+      { failwith ("Unknown character : " ^ (lexeme lexbuf) ^ " in line : " ^ (string_of_int (lexeme_start_p lexbuf).pos_lnum)) }  | eof
       { EOF }
 
 and comment = parse

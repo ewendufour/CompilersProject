@@ -1,0 +1,31 @@
+var closure_3;
+var f_2;
+var closure_1;
+var g_0;
+
+function fun_1(param_x,closure) {
+  return(param_x);
+}
+
+function fun_0(param_z,closure) {
+  var if_0;
+
+  if ((param_z==0)) {
+    if_0 = 3;
+  } else {
+    if_0 = (**closure[2])((**closure[1])((param_z-1),closure[1]),closure[2]);
+  }
+  return(if_0);
+}
+
+main {
+  closure_1 = malloc(4);
+  closure_1[0] = &fun_1;
+  g_0 = closure_1;
+  closure_3 = malloc(12);
+  closure_3[0] = &fun_0;
+  closure_3[1] = closure_3;
+  closure_3[2] = g_0;
+  f_2 = closure_3;
+  print_int((**f_2)(5,f_2));
+}

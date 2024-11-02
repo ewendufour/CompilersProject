@@ -1,1 +1,1 @@
-Solution pour la recursion trouvée, peut etre non viable mais ca marche
+Pattern matching fonctionnel (sans nested patterns) + fix problem d'ordre d'affectation des var libres
