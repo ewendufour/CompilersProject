@@ -91,8 +91,13 @@ let translate_program (p: Miniml.prog) =
       | Fix(x,_,e) ->
         let e0, _ = tr_expr e (VSet.add x bvars) in
         Fix(x, e0)
-      | _ ->
-         failwith "todo"
+
+      | Cstr(s, el) ->
+        Cstr(s, List.map (fun x -> crawl x bvars) el)
+      | Match(e, cl) -> 
+        Match (crawl e bvars, List.map (fun (p, e) -> p, crawl e bvars) cl)
+      (**| _ ->
+         failwith "todo"*)
 
     in
     (* Return the result of the translation, and the list of variables to be 
