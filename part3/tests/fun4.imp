@@ -1,0 +1,47 @@
+var closure_4;
+var g_3;
+var closure_2;
+var f_1;
+var p_0;
+
+function fun_1(param_x,closure) {
+  var closure_0;
+
+  closure_0 = malloc(12);
+  closure_0[0] = &fun_2;
+  closure_0[1] = closure[1];
+  closure_0[2] = param_x;
+  return(closure_0);
+}
+
+function fun_2(param_y,closure) {
+  var closure_0;
+
+  closure_0 = malloc(16);
+  closure_0[0] = &fun_3;
+  closure_0[1] = closure[1];
+  closure_0[2] = param_y;
+  closure_0[3] = closure[2];
+  return(closure_0);
+}
+
+function fun_3(param_z,closure) {
+  return((((closure[3]+closure[2])+param_z)+closure[1]));
+}
+
+function fun_0(param_z,closure) {
+  return((**(**(**closure[1])((**(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1])))(4,(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1]))),closure[1]))(2,(**closure[1])((**(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1])))(4,(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1]))),closure[1])))(param_z,(**(**closure[1])((**(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1])))(4,(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1]))),closure[1]))(2,(**closure[1])((**(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1])))(4,(**(**closure[1])(12,closure[1]))(2,(**closure[1])(12,closure[1]))),closure[1]))));
+}
+
+main {
+  p_0 = 6;
+  closure_2 = malloc(8);
+  closure_2[0] = &fun_1;
+  closure_2[1] = p_0;
+  f_1 = closure_2;
+  closure_4 = malloc(8);
+  closure_4[0] = &fun_0;
+  closure_4[1] = f_1;
+  g_3 = closure_4;
+  print_int((**g_3)(10,g_3));
+}

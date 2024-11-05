@@ -153,9 +153,9 @@ let tr_expr e env =
          let rec split instrl exprl size = function
          | [] -> instrl, exprl, size
          | e::ell -> let is, te  = tr_expr e env in
-                 split (is@instrl) (te::exprl) (size+8) ell
+                 split (is@instrl) (te::exprl) (size+4) ell
          in
-         let instrs, exprs, size = split [] [] 4 el in
+         let instrs, exprs, size = split [] [] 8 el in
          let id = struct_env s in
          let var = new_var "cstr" in 
          let instruction = [
